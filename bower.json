@@ -1,0 +1,20 @@
+{
+  "name": "demo",
+  "description": "",
+  "main": "index.js",
+  "license": "ISC",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.1.1",
+    "bootstrap": "^3.3.7",
+    "animate.css": "^3.5.2",
+    "moment": "^2.17.1"
+  }
+}
