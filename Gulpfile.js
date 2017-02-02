@@ -4,19 +4,11 @@ var connect = require('gulp-connect');
 var open = require('open');
 var runSequence = require('run-sequence');
 var wiredep = require('wiredep').stream;
+var sass = require('gulp-sass');
 
 var config = {
   app: 'app'
 }
-
-// gulp.task('bower', function () {
-//   return gulp.src(paths.views.main)
-//     .pipe(wiredep({
-//       directory: config.app + '/bower_components',
-//       ignorePath: '..'
-//     }))
-//   .pipe(gulp.dest(config.app));
-// });
 
 gulp.task('bower', function () {
   gulp.src('app/index.html')
@@ -25,6 +17,12 @@ gulp.task('bower', function () {
       ignorePath: '..'
     }))
     .pipe(gulp.dest('app'));
+});
+
+gulp.task('sass', function () {
+  return gulp.src('app/sass/**/*.scss')
+    .pipe(sass().on('error', sass.logError))
+    .pipe(gulp.dest('app/css'));
 });
 
 gulp.task('start:server', function() {
@@ -45,7 +43,6 @@ gulp.task('serve', function(cb) {
     'watch',
     cb
   )
-  // open('http://localhost:9000')
 })
 
 gulp.task('html', function () {
@@ -58,9 +55,15 @@ gulp.task('styles', function () {
     .pipe(connect.reload());
 });
 
+gulp.task('sass:styles', function () {
+  return gulp.src('app/sass/**/*.scss')
+    .pipe(connect.reload());
+});
+
 gulp.task('watch', function () {
   gulp.watch(['app/*.html'], ['html']);
   gulp.watch(['app/css/*.css'], ['styles']);
+  gulp.watch(['app/sass/**/*.scss'], ['sass', 'sass:styles']);
 });
 
 gulp.task('default', function() {
