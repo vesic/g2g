@@ -8,10 +8,12 @@ var sass = require('gulp-sass');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var sourcemaps = require('gulp-sourcemaps');
+var jshint = require('gulp-jshint');
+var babel = require('gulp-babel');
 
 var config = {
   app: 'app'
-}
+};
 
 gulp.task('bower', function () {
   gulp.src('app/index.html')
@@ -28,11 +30,20 @@ gulp.task('sass', function () {
     .pipe(gulp.dest('app/css'));
 });
 
-gulp.task('scripts', function() {
-  return gulp.src('app/lib/*.js')
+gulp.task('lint', function() {
+  return gulp.src(['app/lib/*.js', 'Gulpfile.js'])
+    .pipe(jshint())
+    .pipe(jshint.reporter('jshint-stylish'));
+});
+
+gulp.task('scripts', ['lint'], function() {
+  return gulp.src(['app/lib/*.js'])
+    .pipe(babel({
+      presets: ['es2015']
+    }))
     .pipe(sourcemaps.init())
-      .pipe(concat('all.js'))
-      .pipe(uglify())
+    .pipe(concat('all.js'))
+    .pipe(uglify())
     .pipe(sourcemaps.write('../maps'))
     .pipe(gulp.dest('app/js'));
 });
@@ -54,8 +65,8 @@ gulp.task('serve', function(cb) {
     'start:client',
     'watch',
     cb
-  )
-})
+  );
+});
 
 gulp.task('reload:html', function () {
   return gulp.src('app/*.html')
@@ -81,7 +92,8 @@ gulp.task('watch', function () {
   gulp.watch(['app/*.html'], ['reload:html']);
   gulp.watch(['app/css/*.css'], ['reload:styles']);
   gulp.watch(['app/sass/**/*.scss'], ['sass', 'reload:sass']);
-  gulp.watch(['app/lib/**/*.js'], ['scripts', 'reload:scripts'])
+  gulp.watch(['app/lib/**/*.js'], ['scripts', 'reload:scripts']);
+  gulp.watch(['Gulpfile.js'], ['lint']);
 });
 
 gulp.task('default', function() {

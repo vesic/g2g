@@ -1,5 +1,4 @@
-h2 {
-  color: #333; }
-
 body {
-  background: #555; }
+  font: 100% Helvetica, sans-serif;
+  color: #333;
+  background-color: beige; }

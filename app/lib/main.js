@@ -1,11 +1,8 @@
-function hello() {
-  return 'Hello, world';
+class User {
+  hello() {
+    console.log('Hello!');
+  }
 }
 
-function a() {
-  return 'a';
-}
-
-function b() {
-  return 'b';
-}
+let user = new User();
+user.hello()
